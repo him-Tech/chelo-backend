@@ -237,3 +237,28 @@ export const deleteAddress = async (req, res) => {
     res.status(500).json({ success: false, error: "Error deleting address" });
   }
 };
+
+export const allAddresses = async (req, res) => {
+  try {
+    const customerId = req.params.customerId;
+    const customer = await Customer.findById(customerId);
+
+    if (!customer) {
+      return res.status(404).json({ success: false, error: "Customer not found" });
+    }
+    const addresses = await Address.find({ _id: { $in: customer.addresses } });
+
+    res.status(200).json({
+      success: true,
+      message: "All addresses fetched successfully",
+      addresses,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Error in fetching all addresses",
+      error,
+    });
+  }
+};

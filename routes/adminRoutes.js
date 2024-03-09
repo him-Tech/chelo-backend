@@ -9,6 +9,6 @@ router.route('/allCustomers').get(requireSignIn, requireAdmin, getAllCustomersOn
 router.route('/singleCustomer/:customerId').get(requireSignIn, requireAdmin, getCustomerData);
 router.route("/allOrders").get(requireSignIn, requireAdmin, getAllOrdersOnPlatform);
 router.route("/update/:orderId").put(requireSignIn, requireAdmin, updateOrderStatus);
-router.route("/delete/:customerId").put(requireSignIn, requireAdmin, deleteCustomer);
+router.route("/deleteCustomer/:customerId").delete(requireSignIn, requireAdmin, deleteCustomer);
 
 export default router;

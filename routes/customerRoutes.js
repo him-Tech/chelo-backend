@@ -1,5 +1,5 @@
 import express  from "express";
-import { registerCustomer, loginCustomer, orderHistory, addAddressToCustomer, updateAddress, deleteAddress } from "../controllers/customerController.js";
+import { registerCustomer, loginCustomer, orderHistory, addAddressToCustomer, updateAddress, deleteAddress, allAddresses } from "../controllers/customerController.js";
 import { requireSignIn, requireAdmin } from "../middlewares/authenticationMiddleware.js";
 const router = express.Router();
 
@@ -9,6 +9,7 @@ router.route('/history').get(requireSignIn, orderHistory);
 router.route('/addAddress').post(requireSignIn, addAddressToCustomer);
 router.route('/updateAddress/:addressId').put(requireSignIn, updateAddress);
 router.route('/deleteAddress/:addressId').delete(requireSignIn, deleteAddress);
+router.route('/addresses/:customerId').get(requireSignIn, allAddresses);
 
 export default router;
 
