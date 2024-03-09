@@ -7,8 +7,6 @@ export const requireSignIn = async (req, res, next) => {
     const token = req.header("Authorization").replace("Bearer ", "");
     const decoded = jwt.verify(token, process.env.JWT_SECERT);
 
-    console.log("Decoded Token (requireSignIn):", decoded);
-
     req.user = decoded;
     next();
   } catch (error) {

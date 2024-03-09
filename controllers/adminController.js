@@ -185,3 +185,17 @@ export const updateOrderStatus = async (req, res) => {
     });
   }
 };
+
+export const deleteCustomer = async (req, res) => {
+  try {
+    const customerId = req.params.customerId;
+    const deletedUser = await Customer.findByIdAndDelete(customerId);
+    res.status(200).json({
+      success: true,
+      message: "Customer deleted successful",
+      deletedUser
+    })
+  } catch (error) {
+    res.status(500).json({success: false, error: "Error deleting customer" });
+  }
+}

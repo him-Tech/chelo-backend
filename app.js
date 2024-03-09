@@ -9,7 +9,6 @@ import adminRoutes from './routes/adminRoutes.js';
 
 const app = express();
 
-// Middlewares
 app.use(express.json())
 app.use(cors());
 
