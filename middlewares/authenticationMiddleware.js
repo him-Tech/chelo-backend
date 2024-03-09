@@ -20,11 +20,7 @@ export const requireAdmin = async (req, res, next) => {
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized - Not logged in" });
     }
-
-    console.log("Decoded Token (requireAdmin):", req.user);
-
     const admin = await Admin.findById(req.user._id);
-    console.log("Admin found:", admin);
 
     if (!admin) {
       return res.status(403).json({ message: "Forbidden - Not an admin" });
