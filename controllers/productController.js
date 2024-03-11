@@ -99,12 +99,17 @@ export const deleteProduct = async (req, res) => {
   try {
     const productId = req.params.productId;
     const deletedProduct = await Product.findByIdAndDelete(productId);
+    await Order.updateMany(
+      { product: productId },
+      { $pull: { product: productId } }
+    );
+
     res.status(200).json({
       success: true,
       message: "Product deleted successfully",
       deletedProduct,
     });
   } catch (error) {
-    res.status(500).json({success: false, error: "Error deleting product" });
+    res.status(500).json({ success: false, error: "Error deleting product" });
   }
 };
