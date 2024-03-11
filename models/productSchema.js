@@ -25,7 +25,6 @@ const productSchema = new Schema(
       required: true,
     },
     category: {
-      // Stationary items, clothes, gifts, etc....
       type: String,
       required: true,
     },
