@@ -35,7 +35,7 @@ export const addProduct = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Product added successfully",
-      Customer,
+      addNewProduct,
     });
   } catch (error) {
     console.error(error);
@@ -63,7 +63,6 @@ export const getAllProductDetails = async (req, res) => {
 export const getSingleProductDetails = async (req, res) => {
   try {
     const productId = req.params.productId;
-    console.log("productId ->>>>", productId);
 
     const product = await Product.findById(productId);
     if (!product) {
@@ -81,7 +80,6 @@ export const getSingleProductDetails = async (req, res) => {
 export const updateProductData = async (req, res) => {
   try {
     const productId = req.params.productId;
-    console.log("product id during updation ->>", productId);
     const product = Product.findById(productId);
     const updatedProduct = await Product.findByIdAndUpdate(
       productId,

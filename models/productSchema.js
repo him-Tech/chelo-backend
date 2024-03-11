@@ -29,7 +29,7 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
-    clothType: {
+    itemType: {
       // Cotton, nylon, etc
       type: String,
     },

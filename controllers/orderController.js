@@ -5,7 +5,7 @@ import Order from "../models/orderSchema.js";
 export const createOrder = async (req, res) => {
   try {
     const customerId = req.user._id;
-    console.log("Customer id during creating order ->>", customerId);
+
     const {
       generatedId,
       productName,
@@ -14,7 +14,7 @@ export const createOrder = async (req, res) => {
       productColor,
       orderTotalAmount,
       status,
-      productIds,
+      product,
     } = req.body;
 
     // Create the order
@@ -26,7 +26,7 @@ export const createOrder = async (req, res) => {
       productColor,
       orderTotalAmount,
       status,
-      product: productIds, // Save the product IDs directly in the array
+      product: product, // Save the product IDs directly in the array
     });
 
     // Save the order to the database
@@ -59,7 +59,6 @@ export const createOrder = async (req, res) => {
 export const getOrderDetails = async (req, res) => {
   try {
     const orderId = req.params.orderId;
-    console.log("Order id ->>>", orderId);
     const order = await Order.findById(orderId).populate("product");
     if (!order) {
       res.status(404).json({

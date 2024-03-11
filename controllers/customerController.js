@@ -189,7 +189,6 @@ export const addAddressToCustomer = async (req, res) => {
 export const updateAddress = async (req, res) => {
   try {
     const addressId = req.params.addressId;
-    console.log("Address id during updation ->>", addressId);
 
     const existingAddress = await Address.findById(addressId);
     if (!existingAddress) {
