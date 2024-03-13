@@ -4,6 +4,7 @@ import customerRoutes from './routes/customerRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
 
 
 
@@ -17,6 +18,7 @@ app.use('/api/v1/customer',customerRoutes);
 app.use('/api/v1/product',productRoutes);
 app.use('/api/v1/order',orderRoutes);
 app.use('/api/v1/admin',adminRoutes);
+app.use('/api/v1/category',categoryRoutes);
 
 
 // Rest Api  

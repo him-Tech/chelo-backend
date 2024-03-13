@@ -1,7 +1,7 @@
 import Customer from "../models/customerSchema.js";
 import Product from "../models/productSchema.js";
 import Order from "../models/orderSchema.js";
-
+import Category from "../models/categorySchema.js";
 
 export const addProduct = async (req, res) => {
   try {
@@ -18,18 +18,28 @@ export const addProduct = async (req, res) => {
       quantity,
     } = req.body;
 
+    // Check if the provided category ID exists
+    const existingCategory = await Category.findById(category);
+    if (!existingCategory) {
+      return res.status(400).json({
+        success: false,
+        message: "Category does not exist",
+      });
+    }
+
     const addNewProduct = new Product({
       name,
       img,
       status,
       price,
       description,
-      category,
+      category: category,
       itemType,
       sizes,
       colors,
       quantity,
     });
+
     await addNewProduct.save();
 
     res.status(201).json({
@@ -46,6 +56,7 @@ export const addProduct = async (req, res) => {
     });
   }
 };
+
 
 export const getAllProductDetails = async (req, res) => {
   try {

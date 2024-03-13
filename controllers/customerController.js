@@ -13,8 +13,8 @@ export const registerCustomer = async (req, res) => {
       });
     }
 
-    const exixtingCustomer = await Customer.findOne({ email });
-    if (exixtingCustomer) {
+    const existingCustomer = await Customer.findOne({ email });
+    if (existingCustomer) {
       return res.status(400).send({
         success: false,
         message: "Customer is Already Register please login",

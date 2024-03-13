@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Category from "./categorySchema.js";
 const { Schema } = mongoose;
 
 const productSchema = new Schema(
@@ -24,10 +25,12 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
-    category: {
-      type: String,
-      required: true,
-    },
+    category: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Category",
+      }
+    ],
     itemType: {
       // Cotton, nylon, etc
       type: String,
