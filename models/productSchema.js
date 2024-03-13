@@ -9,8 +9,7 @@ const productSchema = new Schema(
       required: true,
     },
     img: {
-      data: Buffer,
-      contentType: String,
+      type: String,
     },
     status: {
       // whether the product is available or out of stock
@@ -29,7 +28,7 @@ const productSchema = new Schema(
       {
         type: Schema.Types.ObjectId,
         ref: "Category",
-      }
+      },
     ],
     itemType: {
       // Cotton, nylon, etc
@@ -38,13 +37,11 @@ const productSchema = new Schema(
     sizes: [
       {
         type: String,
-        required: true,
       },
     ],
     colors: [
       {
         type: String,
-        required: true,
       },
     ],
     quantity: {

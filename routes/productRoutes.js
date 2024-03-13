@@ -11,7 +11,7 @@ import { requireSignIn, requireAdmin } from "../middlewares/authenticationMiddle
 const router = express.Router();
 
 
-router.post("/addProduct", requireSignIn, requireAdmin, addProduct);
+router.post("/addProduct", addProduct);
 router.get("/getAllProducts", requireSignIn, getAllProductDetails);
 router.get("/getProduct/:productId", requireSignIn, getSingleProductDetails);
 router.put("/updateProduct/:productId", requireSignIn, requireAdmin, updateProductData);

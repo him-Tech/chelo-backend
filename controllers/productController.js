@@ -2,12 +2,17 @@ import Customer from "../models/customerSchema.js";
 import Product from "../models/productSchema.js";
 import Order from "../models/orderSchema.js";
 import Category from "../models/categorySchema.js";
+import { v2 as cloudinary } from "cloudinary";
+import { uploadImageToCloudinary } from "../utils/imageUploader.js";
+
+function isFileTypeSupported(type, supportedTypes) {
+  return supportedTypes.includes(type);
+}
 
 export const addProduct = async (req, res) => {
   try {
-    const {
+    let {
       name,
-      img,
       status,
       price,
       description,
@@ -18,18 +23,34 @@ export const addProduct = async (req, res) => {
       quantity,
     } = req.body;
 
-    // Check if the provided category ID exists
-    const existingCategory = await Category.findById(category);
-    if (!existingCategory) {
+    const thumbnail = req.files.thumbnailImage;
+
+    //Image validation
+    const supportedTypes = ["jpg", "jpeg", "png"];
+    const fileType = thumbnail.name.split(".")[1].toLowerCase();
+
+    if (!isFileTypeSupported(fileType, supportedTypes)) {
       return res.status(400).json({
         success: false,
-        message: "Category does not exist",
+        message: "File format not supported",
       });
     }
 
+    if (!name || !status || !price || !description || !quantity || !thumbnail) {
+      return res.status(400).json({
+        success: false,
+        message: "All Fields are Mandatory",
+      });
+    }
+
+    const thumbnailImage = await uploadImageToCloudinary(
+      thumbnail,
+      process.env.FOLDER_NAME
+    );
+
     const addNewProduct = new Product({
       name,
-      img,
+      img: thumbnailImage.secure_url,
       status,
       price,
       description,
@@ -57,7 +78,6 @@ export const addProduct = async (req, res) => {
   }
 };
 
-
 export const getAllProductDetails = async (req, res) => {
   try {
     const products = await Product.find();
@@ -67,7 +87,9 @@ export const getAllProductDetails = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, error: "Error fetching all product details" });
+    res
+      .status(500)
+      .json({ success: false, error: "Error fetching all product details" });
   }
 };
 
@@ -82,27 +104,58 @@ export const getSingleProductDetails = async (req, res) => {
         error: "Product not found",
       });
     }
-    res.status(200).json({success: true, product });
+    res.status(200).json({ success: true, product });
   } catch (error) {
-    res.status(500).json({success: false, error: "Unable to find single product" });
+    res
+      .status(500)
+      .json({ success: false, error: "Unable to find single product" });
   }
 };
 
 export const updateProductData = async (req, res) => {
   try {
     const productId = req.params.productId;
-    const product = Product.findById(productId);
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res
+        .status(404)
+        .json({ success: false, error: "Product not found" });
+    }
+
+    // Check if there's a new image file in the request
+    if (req.files) {
+      const thumbnail = req.files.thumbnailImage;
+      const supportedTypes = ["jpg", "jpeg", "png"];
+      const fileType = thumbnail.name.split(".")[1].toLowerCase();
+
+      if (!isFileTypeSupported(fileType, supportedTypes)) {
+        return res.status(400).json({
+          success: false,
+          message: "File format not supported",
+        });
+      }
+
+      const thumbnailImage = await uploadImageToCloudinary(
+        thumbnail,
+        process.env.FOLDER_NAME
+      );
+      product.img = thumbnailImage.secure_url;
+    }
+
+    // Update product data
     const updatedProduct = await Product.findByIdAndUpdate(
       productId,
-      req.body,
+      { $set: req.body }, // Use $set to update only provided fields
       { new: true, runValidators: true }
     );
-    if (!updatedProduct) {
-      return res.status(404).json({success: false, error: "Product not found" });
-    }
-    res.status(200).json({success: true, updatedProduct});
+
+    // await product.save();
+
+    res.status(200).json({ success: true, updatedProduct });
   } catch (error) {
-    res.status(500).json({success: false, error: "Internal Server Error" });
+    console.error(error);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 };
 
