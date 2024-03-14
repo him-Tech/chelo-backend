@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Product from "./productSchema.js";
+import Customer from "./customerSchema.js";
 const { Schema } = mongoose;
 
 const orderSchema = new Schema(
@@ -29,9 +30,15 @@ const orderSchema = new Schema(
       required: true,
     },
     status: {
-      type: String,
-      enum: ["pending", "delivered", "refunded", "cancelled"],
-      required: true,
+      statusType: {
+        type: String,
+      },
+      deliveryCompany: {
+        type: String,
+      },
+      trackingNumber: {
+        type: String,
+      },
     },
     orderDate: {
       type: Date,
@@ -43,6 +50,10 @@ const orderSchema = new Schema(
         ref: "Product",
       },
     ],
+    customer: {
+      type: Schema.Types.ObjectId,
+      ref: "Customer",
+    },
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields
