@@ -124,6 +124,7 @@ export const updateProductData = async (req, res) => {
     }
 
     // Check if there's a new image file in the request
+    let updatedThumbnail = product.img;
     if (req.files) {
       const thumbnail = req.files.thumbnailImage;
       const supportedTypes = ["jpg", "jpeg", "png"];
@@ -140,7 +141,9 @@ export const updateProductData = async (req, res) => {
         thumbnail,
         process.env.FOLDER_NAME
       );
-      product.img = thumbnailImage.secure_url;
+      updatedThumbnail = thumbnailImage.secure_url;
+      product.img = updatedThumbnail;
+      await product.save();
     }
 
     // Update product data
