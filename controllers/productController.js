@@ -151,7 +151,7 @@ export const updateProductData = async (req, res) => {
       productId,
       { $set: req.body }, // Use $set to update only provided fields
       { new: true, runValidators: true }
-    );
+    ).populate("category");
 
     // await product.save();
 
