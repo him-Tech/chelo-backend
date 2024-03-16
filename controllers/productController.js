@@ -97,7 +97,7 @@ export const getSingleProductDetails = async (req, res) => {
   try {
     const productId = req.params.productId;
 
-    const product = await Product.findById(productId);
+    const product = await Product.findById(productId).populate("category");
     if (!product) {
       res.status(404).json({
         success: false,

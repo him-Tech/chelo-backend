@@ -19,7 +19,6 @@ const orderSchema = new Schema(
     },
     productSize: {
       type: String,
-      required: true,
     },
     productColor: {
       type: String,
@@ -44,12 +43,10 @@ const orderSchema = new Schema(
       type: Date,
       default: Date.now,
     },
-    product: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Product",
-      },
-    ],
+    product: {
+      type: Schema.Types.ObjectId,
+      ref: "Product",
+    },
     customer: {
       type: Schema.Types.ObjectId,
       ref: "Customer",
