@@ -48,6 +48,9 @@ export const addProduct = async (req, res) => {
       process.env.FOLDER_NAME
     );
 
+    sizes = sizes.split(",");
+    colors = colors.split(",");
+
     const addNewProduct = new Product({
       name,
       img: thumbnailImage.secure_url,
@@ -144,6 +147,13 @@ export const updateProductData = async (req, res) => {
       updatedThumbnail = thumbnailImage.secure_url;
       product.img = updatedThumbnail;
       await product.save();
+    }
+
+    if (req.body.sizes) {
+      req.body.sizes = req.body.sizes.split(",");
+    }
+    if (req.body.colors) {
+      req.body.colors = req.body.colors.split(", ");
     }
 
     // Update product data
