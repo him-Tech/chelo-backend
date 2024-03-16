@@ -89,7 +89,7 @@ export const getAllProductDetails = async (req, res) => {
     console.error(error);
     res
       .status(500)
-      .json({ success: false, error: "Error fetching all product details" });
+      .json({ success: false, message: "Error fetching all product details" });
   }
 };
 
@@ -101,14 +101,14 @@ export const getSingleProductDetails = async (req, res) => {
     if (!product) {
       res.status(404).json({
         success: false,
-        error: "Product not found",
+        message: "Product not found",
       });
     }
     res.status(200).json({ success: true, product });
   } catch (error) {
     res
       .status(500)
-      .json({ success: false, error: "Unable to find single product" });
+      .json({ success: false, message: "Unable to find single product" });
   }
 };
 
@@ -120,7 +120,7 @@ export const updateProductData = async (req, res) => {
     if (!product) {
       return res
         .status(404)
-        .json({ success: false, error: "Product not found" });
+        .json({ success: false, message: "Product not found" });
     }
 
     // Check if there's a new image file in the request
@@ -158,7 +158,7 @@ export const updateProductData = async (req, res) => {
     res.status(200).json({ success: true, updatedProduct });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, error: "Internal Server Error" });
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 
@@ -177,6 +177,6 @@ export const deleteProduct = async (req, res) => {
       deletedProduct,
     });
   } catch (error) {
-    res.status(500).json({ success: false, error: "Error deleting product" });
+    res.status(500).json({ success: false, message: "Error deleting product" });
   }
 };

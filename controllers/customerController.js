@@ -194,7 +194,7 @@ export const updateAddress = async (req, res) => {
     if (!existingAddress) {
       return res.status(404).json({
         success: false,
-        error: "Address not found",
+        message: "Address not found",
       });
     }
 
@@ -212,7 +212,7 @@ export const updateAddress = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: "Internal Server Error",
+      message: "Internal Server Error",
     });
   }
 };
@@ -233,7 +233,7 @@ export const deleteAddress = async (req, res) => {
       deletedAddress,
     });
   } catch (error) {
-    res.status(500).json({ success: false, error: "Error deleting address" });
+    res.status(500).json({ success: false, message: "Error deleting address" });
   }
 };
 
@@ -243,7 +243,7 @@ export const allAddresses = async (req, res) => {
     const customer = await Customer.findById(customerId);
 
     if (!customer) {
-      return res.status(404).json({ success: false, error: "Customer not found" });
+      return res.status(404).json({ success: false, message: "Customer not found" });
     }
     const addresses = await Address.find({ _id: { $in: customer.addresses } });
 
