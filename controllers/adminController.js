@@ -169,7 +169,7 @@ export const updateOrderStatus = async (req, res) => {
     if (!updatedOrder) {
       return res.status(404).json({
         success: false,
-        error: "Order not found",
+        message: "Order not found",
       });
     }
     res.status(200).json({
@@ -200,9 +200,9 @@ export const deleteCustomer = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Customer deleted successful",
-      deletedUser
-    })
+      deletedUser,
+    });
   } catch (error) {
-    res.status(500).json({success: false, error: "Error deleting customer" });
+    res.status(500).json({ success: false, message: "Error deleting customer" });
   }
-}
+};

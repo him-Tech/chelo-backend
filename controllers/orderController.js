@@ -94,7 +94,7 @@ export const deleteOrder = async (req, res) => {
     const orderId = req.params.orderId;
     const deletedOrder = await Order.findByIdAndDelete(orderId);
     if (!deletedOrder) {
-      return res.status(404).json({ success: true, error: "Order not found" });
+      return res.status(404).json({ success: true, message: "Order not found" });
     }
 
     await Customer.updateOne(
@@ -104,7 +104,7 @@ export const deleteOrder = async (req, res) => {
 
     res.status(200).json({ success: true, deletedOrder });
   } catch (error) {
-    res.status(500).json({ success: false, error: "Internal Server Error" });
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 
