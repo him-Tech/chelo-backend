@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-export const sendEmail = async (email, emailContent) => {
+export const sendEmail = async (email, emailContent, emailSubject) => {
   try {
     // Create transporter
     let transporter = nodemailer.createTransport({
@@ -15,7 +15,7 @@ export const sendEmail = async (email, emailContent) => {
     let info = await transporter.sendMail({
       from: `CheloShop`,
       to: email,
-      subject: "Order Updates",
+      subject: emailSubject,
       text: emailContent,
     });
 

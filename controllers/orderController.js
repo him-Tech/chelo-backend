@@ -117,6 +117,7 @@ export const updateOrderStatus = async (req, res) => {
       trackingNumber,
       emailContent,
       customerEmail,
+      emailSubject,
     } = req.body;
 
     // Check for order in DB
@@ -136,7 +137,7 @@ export const updateOrderStatus = async (req, res) => {
     await Order.findByIdAndUpdate(orderId, updateFields);
 
     if (emailContent) {
-      await sendEmail(customerEmail, emailContent);
+      await sendEmail(customerEmail, emailContent, emailSubject);
     }
 
     res.status(200).json({
