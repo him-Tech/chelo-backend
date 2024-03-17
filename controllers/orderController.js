@@ -136,7 +136,7 @@ export const updateOrderStatus = async (req, res) => {
     if (trackingNumber) updateFields["status.trackingNumber"] = trackingNumber;
     await Order.findByIdAndUpdate(orderId, updateFields);
 
-    if (emailContent) {
+    if (emailContent && customerEmail && emailSubject) {
       await sendEmail(customerEmail, emailContent, emailSubject);
     }
 
