@@ -11,7 +11,6 @@ export const sendCustomerEmail = async (req, res) => {
       message: "Mail sent successfully",
     });
   } catch (error) {
-    console.error(error);
     res.status(500).json({
       success: false,
       message: "Error sending email",
