@@ -48,8 +48,38 @@ const orderSchema = new Schema(
       ref: "Product",
     },
     customer: {
-      type: Schema.Types.ObjectId,
-      ref: "Customer",
+      customerName: {
+        type: String,
+        required: true,
+      },
+      customerEmail: {
+        type: String,
+        require: true,
+      },
+      address: {
+        addressLine1: {
+          type: String,
+          required: true,
+        },
+        addressLine2: String,
+        addressLine3: String,
+        city: {
+          type: String,
+          required: true,
+        },
+        state: {
+          type: String,
+          required: true,
+        },
+        streetCode: {
+          type: String,
+          required: true,
+        },
+        contactNumber: {
+          type: String,
+          required: true,
+        },
+      },
     },
   },
   {

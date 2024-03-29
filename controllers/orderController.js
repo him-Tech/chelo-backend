@@ -7,8 +7,6 @@ import { sendEmail } from "../utils/sendEmail.js";
 
 export const createOrder = async (req, res) => {
   try {
-    const customerId = req.user._id;
-    console.log("customer ki id: ->>", customerId);
 
     const {
       generatedId,
@@ -26,6 +24,12 @@ export const createOrder = async (req, res) => {
       trackingNumber: "Will be updated soon",
     };
 
+    const customerData = {
+      customerName: req.body.customerName,
+      customerEmail: req.body.customerEmail,
+      address: req.body.address,
+    }
+
     // Create the order
     const order = new Order({
       generatedId,
@@ -36,20 +40,19 @@ export const createOrder = async (req, res) => {
       orderTotalAmount,
       status: defaultStatus,
       product: product,
-      customer: customerId,
+      customer: customerData,
     });
 
-    // Save the order to the database
     await order.save();
 
     // Update the customer's orderHistory
-    await Customer.findByIdAndUpdate(
-      customerId,
-      {
-        $push: { orderHistory: order._id },
-      },
-      { new: true, runValidators: true }
-    );
+    // await Customer.findByIdAndUpdate(
+    //   customerId,
+    //   {
+    //     $push: { orderHistory: order._id },
+    //   },
+    //   { new: true, runValidators: true }
+    // );
 
     res.status(201).json({
       success: true,

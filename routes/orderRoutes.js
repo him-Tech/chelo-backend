@@ -8,7 +8,7 @@ import {
 import { requireSignIn, requireAdmin } from "../middlewares/authenticationMiddleware.js";
 const router = express.Router();
 
-router.route("/create").post(requireSignIn, createOrder);
+router.route("/create").post(createOrder);
 router.route("/details/:orderId").get(requireSignIn, getOrderDetails);
 router.route("/delete/:orderId").delete(requireSignIn, deleteOrder);
 router.route("/update/:orderId").put(requireSignIn, requireAdmin, updateOrderStatus);
