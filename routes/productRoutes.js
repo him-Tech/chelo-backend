@@ -12,8 +12,8 @@ const router = express.Router();
 
 
 router.post("/addProduct", addProduct);
-router.get("/getAllProducts", requireSignIn, getAllProductDetails);
-router.get("/getProduct/:productId", requireSignIn, getSingleProductDetails);
+router.get("/getAllProducts", getAllProductDetails);
+router.get("/getProduct/:productId", getSingleProductDetails);
 router.put("/updateProduct/:productId", requireSignIn, requireAdmin, updateProductData);
 router.delete("/deleteProduct/:productId", requireSignIn, requireAdmin, deleteProduct);
 
