@@ -97,11 +97,15 @@ export const loginAdmin = async (req, res) => {
 
 export const updatePassword = async (req, res) => {
   try {
-    const { currentEmail, currentPassword, newPassword } = req.body;
-    const admin = await Admin.findOne({ email: currentEmail }); // Await the result
-    console.log(admin);
+    const { currentPassword, newPassword } = req.body;
     const adminId = req.user._id;
-    console.log("Admin ki id ->>>>>", adminId);
+    const admin = await Admin.findById(adminId);
+    if (!admin) {
+      return res.status(400).json({
+        success: false,
+        message: "No admin found with this ID",
+      });
+    }
 
     if (!admin) {
       return res.status(400).json({
@@ -119,7 +123,6 @@ export const updatePassword = async (req, res) => {
     }
 
     const hashedPassword = await hashPassword(newPassword);
-    console.log("Hashed", hashedPassword);
     const updatedPassword = await Admin.findByIdAndUpdate(
       adminId,
       { password: hashedPassword }, // Update only the 'password' field
@@ -131,6 +134,7 @@ export const updatePassword = async (req, res) => {
       message: "Password updated successfully",
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       success: false,
       message: "Internal Server Error",
@@ -140,13 +144,14 @@ export const updatePassword = async (req, res) => {
 
 export const updateEmail = async (req, res) => {
   try {
-    const { currentEmail, currentPassword, newEmail } = req.body;
+    const { currentEmail, newEmail, currentPassword } = req.body;
     const adminId = req.user._id;
-    const admin = await Admin.findOne({ email: currentEmail });
+
+    const admin = await Admin.findById(adminId);
     if (!admin) {
       return res.status(400).json({
         success: false,
-        message: "No admin found with this email",
+        message: "No admin found with this ID",
       });
     }
 
@@ -158,9 +163,16 @@ export const updateEmail = async (req, res) => {
       });
     }
 
+    if (admin.email !== currentEmail) {
+      return res.status(400).json({
+        success: false,
+        message: "Current email is incorrect",
+      });
+    }
+
     const updatedEmail = await Admin.findByIdAndUpdate(
       adminId,
-      { email: newEmail }, // Update email field only
+      { email: newEmail },
       { new: true, runValidators: true }
     );
 
@@ -169,6 +181,7 @@ export const updateEmail = async (req, res) => {
       message: "Email changed successfully",
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       success: false,
       message: "Error changing admin email",
