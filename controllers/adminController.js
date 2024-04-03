@@ -189,6 +189,29 @@ export const updateEmail = async (req, res) => {
   }
 };
 
+export const adminData = async (req, res) => {
+  try {
+    const adminId = req.user._id;
+    const admin = await Admin.findById(adminId);
+    if (!admin)
+      return res.status(404).json({
+        success: false,
+        message: "Error fetching admin details",
+      });
+    return res.status(200).json({
+      admin,
+      success: true,
+      message: "Admin data fetched successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Interval server error",
+    });
+  }
+};
+
 export const getCustomerData = async (req, res) => {
   try {
     const customerId = req.params.customerId;
