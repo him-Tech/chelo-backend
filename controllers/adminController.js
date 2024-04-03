@@ -95,6 +95,87 @@ export const loginAdmin = async (req, res) => {
   }
 };
 
+export const updatePassword = async (req, res) => {
+  try {
+    const { currentEmail, currentPassword, newPassword } = req.body;
+    const admin = await Admin.findOne({ email: currentEmail }); // Await the result
+    console.log(admin);
+    const adminId = req.user._id;
+    console.log("Admin ki id ->>>>>", adminId);
+
+    if (!admin) {
+      return res.status(400).json({
+        success: false,
+        message: "No admin registered with this email address",
+      });
+    }
+
+    const match = await comparePassword(currentPassword, admin.password);
+    if (!match) {
+      return res.status(400).json({
+        success: false,
+        message: "Current password is incorrect",
+      });
+    }
+
+    const hashedPassword = await hashPassword(newPassword);
+    console.log("Hashed", hashedPassword);
+    const updatedPassword = await Admin.findByIdAndUpdate(
+      adminId,
+      { password: hashedPassword }, // Update only the 'password' field
+      { new: true, runValidators: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Password updated successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+export const updateEmail = async (req, res) => {
+  try {
+    const { currentEmail, currentPassword, newEmail } = req.body;
+    const adminId = req.user._id;
+    const admin = await Admin.findOne({ email: currentEmail });
+    if (!admin) {
+      return res.status(400).json({
+        success: false,
+        message: "No admin found with this email",
+      });
+    }
+
+    const match = await comparePassword(currentPassword, admin.password);
+    if (!match) {
+      return res.status(400).json({
+        success: false,
+        message: "Current password is incorrect",
+      });
+    }
+
+    const updatedEmail = await Admin.findByIdAndUpdate(
+      adminId,
+      { email: newEmail }, // Update email field only
+      { new: true, runValidators: true }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Email changed successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error changing admin email",
+    });
+  }
+};
+
 export const getCustomerData = async (req, res) => {
   try {
     const customerId = req.params.customerId;
@@ -203,6 +284,8 @@ export const deleteCustomer = async (req, res) => {
       deletedUser,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Error deleting customer" });
+    res
+      .status(500)
+      .json({ success: false, message: "Error deleting customer" });
   }
 };
