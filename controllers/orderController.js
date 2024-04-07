@@ -4,10 +4,8 @@ import Order from "../models/orderSchema.js";
 import { response } from "express";
 import { sendEmail } from "../utils/sendEmail.js";
 
-
 export const createOrder = async (req, res) => {
   try {
-
     const {
       generatedId,
       productName,
@@ -15,7 +13,7 @@ export const createOrder = async (req, res) => {
       productSize,
       productColor,
       orderTotalAmount,
-      product,
+      products, // This should be an array of product ObjectId's
     } = req.body;
 
     const defaultStatus = {
@@ -28,7 +26,10 @@ export const createOrder = async (req, res) => {
       customerName: req.body.customerName,
       customerEmail: req.body.customerEmail,
       address: req.body.address,
-    }
+    };
+
+    // Populate products
+    // const populatedProducts = await Product.find({ _id: { $in: products } });
 
     // Create the order
     const order = new Order({
@@ -39,20 +40,15 @@ export const createOrder = async (req, res) => {
       productColor,
       orderTotalAmount,
       status: defaultStatus,
-      product: product,
+      products: products.map(({ productId, quantity, size }) => ({
+        product: productId,
+        quantity,
+        orderedProductSize: size,
+      })),
       customer: customerData,
     });
 
     await order.save();
-
-    // Update the customer's orderHistory
-    // await Customer.findByIdAndUpdate(
-    //   customerId,
-    //   {
-    //     $push: { orderHistory: order._id },
-    //   },
-    //   { new: true, runValidators: true }
-    // );
 
     res.status(201).json({
       success: true,
@@ -72,15 +68,32 @@ export const createOrder = async (req, res) => {
 export const getOrderDetails = async (req, res) => {
   try {
     const orderId = req.params.orderId;
-    const order = await Order.findById(orderId).populate("product");
+    const order = await Order.findById(orderId).populate({
+      path: "products",
+      populate: {
+        path: "product",
+        select: "-createdAt -updatedAt -__v", // Exclude unnecessary fields
+      },
+    });
     if (!order) {
-      res.status(404).json({
+      return res.status(404).json({
         message: "Order not found",
       });
     }
+
+    const productsWithQuantity = order.products.map((orderProduct) => ({
+      ...orderProduct.product.toObject(),
+      quantity: orderProduct.quantity,
+      orderedProductSize: orderProduct.orderedProductSize,
+    }));
+
+    // Return the order data with the updated products array
     res.status(200).json({
       message: "Order data fetched successfully",
-      order,
+      order: {
+        ...order.toObject(),
+        products: productsWithQuantity,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -97,7 +110,9 @@ export const deleteOrder = async (req, res) => {
     const orderId = req.params.orderId;
     const deletedOrder = await Order.findByIdAndDelete(orderId);
     if (!deletedOrder) {
-      return res.status(404).json({ success: true, message: "Order not found" });
+      return res
+        .status(404)
+        .json({ success: true, message: "Order not found" });
     }
 
     await Customer.updateOne(

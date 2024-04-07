@@ -43,10 +43,23 @@ const orderSchema = new Schema(
       type: Date,
       default: Date.now,
     },
-    product: {
-      type: Schema.Types.ObjectId,
-      ref: "Product",
-    },
+    products: [
+      {
+        product: {
+          type: Schema.Types.ObjectId,
+          ref: "Product",
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
+        orderedProductSize: {
+          type: String,
+          required: true,
+        }
+      },
+    ],
+
     customer: {
       customerName: {
         type: String,
