@@ -9,18 +9,7 @@ const orderSchema = new Schema(
       type: String,
       required: true,
     },
-    productName: {
-      type: String,
-      required: true,
-    },
     productQuantity: {
-      type: String,
-      required: true,
-    },
-    productSize: {
-      type: String,
-    },
-    productColor: {
       type: String,
       required: true,
     },

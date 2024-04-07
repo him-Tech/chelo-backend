@@ -8,10 +8,7 @@ export const createOrder = async (req, res) => {
   try {
     const {
       generatedId,
-      productName,
       productQuantity,
-      productSize,
-      productColor,
       orderTotalAmount,
       products, // This should be an array of product ObjectId's
     } = req.body;
@@ -34,10 +31,7 @@ export const createOrder = async (req, res) => {
     // Create the order
     const order = new Order({
       generatedId,
-      productName,
       productQuantity,
-      productSize,
-      productColor,
       orderTotalAmount,
       status: defaultStatus,
       products: products.map(({ productId, quantity, size }) => ({
