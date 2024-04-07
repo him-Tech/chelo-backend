@@ -10,6 +10,7 @@ export const createOrder = async (req, res) => {
       generatedId,
       productQuantity,
       orderTotalAmount,
+      productNames,
       products, // This should be an array of product ObjectId's
     } = req.body;
 
@@ -31,6 +32,7 @@ export const createOrder = async (req, res) => {
       productQuantity,
       orderTotalAmount,
       status: defaultStatus,
+      productName: productNames,
       products: products.map(({ productId, quantity, size }) => ({
         product: productId,
         quantity,
@@ -44,14 +46,30 @@ export const createOrder = async (req, res) => {
     console.log("order successful");
 
     for (const { productId, quantity } of products) {
-      const product = await Product.findById(productId);
-      if (!product) {
-        throw new Error(`Product with ID ${productId} not found.`);
+      for (const { productId, quantity } of products) {
+        const product = await Product.findById(productId);
+        if (!product) {
+          throw new Error(`Product with ID ${productId} not found.`);
+        }
+
+        // Convert quantity to integer using parseInt
+        const parsedQuantity = parseInt(quantity, 10); // Base 10
+
+        if (isNaN(parsedQuantity)) {
+          throw new Error(
+            `Invalid quantity value for product with ID ${productId}.`
+          );
+        }
+
+        // Perform update with parsed quantity
+        await Product.findByIdAndUpdate(productId, {
+          $inc: { quantity: -parsedQuantity },
+        });
+
+        console.log(
+          `Product with ID ${productId} updated successfully. Quantity decreased by ${parsedQuantity}.`
+        );
       }
-      await Product.findByIdAndUpdate(productId, {
-        $inc: { quantity: -quantity },
-      });
-      console.log(`Product with ID ${productId} updated successfully. Quantity decreased by ${quantity}.`);
     }
 
     res.status(201).json({

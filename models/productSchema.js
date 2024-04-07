@@ -4,6 +4,10 @@ const { Schema } = mongoose;
 
 const productSchema = new Schema(
   {
+    quantity: {
+      type: Number,
+      required: true,
+    },    
     name: {
       type: String,
       required: true,
@@ -12,7 +16,6 @@ const productSchema = new Schema(
       type: String,
     },
     status: {
-      // whether the product is available or out of stock
       type: Boolean,
       required: true,
     },
@@ -42,10 +45,6 @@ const productSchema = new Schema(
         type: String,
       },
     ],
-    quantity: {
-      type: String,
-      required: true,
-    },
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields

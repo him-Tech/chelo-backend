@@ -10,11 +10,11 @@ const orderSchema = new Schema(
       required: true,
     },
     productQuantity: {
-      type: String,
+      type: Number,
       required: true,
     },
     orderTotalAmount: {
-      type: String,
+      type: Number,
       required: true,
     },
     status: {
