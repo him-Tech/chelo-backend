@@ -25,9 +25,6 @@ export const createOrder = async (req, res) => {
       address: req.body.address,
     };
 
-    // Populate products
-    // const populatedProducts = await Product.find({ _id: { $in: products } });
-
     // Create the order
     const order = new Order({
       generatedId,
@@ -43,6 +40,19 @@ export const createOrder = async (req, res) => {
     });
 
     await order.save();
+
+    console.log("order successful");
+
+    for (const { productId, quantity } of products) {
+      const product = await Product.findById(productId);
+      if (!product) {
+        throw new Error(`Product with ID ${productId} not found.`);
+      }
+      await Product.findByIdAndUpdate(productId, {
+        $inc: { quantity: -quantity },
+      });
+      console.log(`Product with ID ${productId} updated successfully. Quantity decreased by ${quantity}.`);
+    }
 
     res.status(201).json({
       success: true,
