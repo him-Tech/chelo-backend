@@ -32,6 +32,12 @@ const orderSchema = new Schema(
       type: Date,
       default: Date.now,
     },
+    productName: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
     products: [
       {
         product: {
@@ -45,7 +51,7 @@ const orderSchema = new Schema(
         orderedProductSize: {
           type: String,
           required: true,
-        }
+        },
       },
     ],
 
