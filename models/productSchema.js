@@ -42,7 +42,7 @@ const productSchema = new Schema(
         type: String,
       },
     ],
-    availableQuantity: {
+    quantity: {
       type: String,
       required: true,
     },
