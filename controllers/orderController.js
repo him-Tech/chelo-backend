@@ -3,6 +3,35 @@ import Product from "../models/productSchema.js";
 import Order from "../models/orderSchema.js";
 import { response } from "express";
 import { sendEmail } from "../utils/sendEmail.js";
+import { confirmOrder } from "../emailTemplates/orderConfirmed.js";
+
+const confirmOrderUpdateEmail = async (
+  customerName,
+  orderNumber,
+  orderDate,
+  productsData,
+  customerEmail
+) => {
+  try {
+    const emailRes = await sendEmail(
+      customerEmail,
+      confirmOrder(orderNumber, customerName, orderDate, productsData),
+      "We have got your order"
+    );
+
+    return {
+      success: true,
+      message: "Email sent successfully",
+    };
+  } catch (error) {
+    console.log("Error", error);
+    console.log("Error message :", error.message);
+    return {
+      success: false,
+      message: "Something went wrong...",
+    };
+  }
+};
 
 export const createOrder = async (req, res) => {
   try {
@@ -26,6 +55,27 @@ export const createOrder = async (req, res) => {
       address: req.body.address,
     };
 
+    const productsForEmail = [];
+    await Promise.all(
+      products.map(async ({ productId, quantity, size }) => {
+        // Ensure the product exists
+        const product = await Product.findById(productId);
+        if (!product) {
+          throw new Error(`Product with ID ${productId} not found.`);
+        }
+
+        // Push product details to productsForEmail array
+        productsForEmail.push({
+          productName: product.name,
+          productQuantity: quantity, // Use the quantity from the request body
+          productSize: size,
+          productDetails: product.description,
+          productPrice: product.price,
+          productImage: product.img,
+        });
+      })
+    );
+
     // Create the order
     const order = new Order({
       generatedId,
@@ -41,35 +91,46 @@ export const createOrder = async (req, res) => {
       customer: customerData,
     });
 
+    const emailData = {
+      customerName: req.body.customerName,
+      ordernumber: req.body.generatedId,
+      orderDate: Date.now(),
+      productsdata: productsForEmail,
+      customerEmail: req.body.customerEmail,
+    };
+    await confirmOrderUpdateEmail(
+      req.body.customerName,
+      req.body.generatedId,
+      Date.now(),
+      productsForEmail,
+      req.body.customerEmail
+    );
+
     await order.save();
 
     console.log("order successful");
 
     for (const { productId, quantity } of products) {
-      for (const { productId, quantity } of products) {
-        const product = await Product.findById(productId);
-        if (!product) {
-          throw new Error(`Product with ID ${productId} not found.`);
-        }
+      const product = await Product.findById(productId);
+      if (!product) {
+        throw new Error(`Product with ID ${productId} not found.`);
+      }
 
-        // Convert quantity to integer using parseInt
-        const parsedQuantity = parseInt(quantity, 10); // Base 10
+      // Convert quantity to integer using parseInt
+      const parsedQuantity = parseInt(quantity, 10); // Base 10
 
-        if (isNaN(parsedQuantity)) {
-          throw new Error(
-            `Invalid quantity value for product with ID ${productId}.`
-          );
-        }
-
-        // Perform update with parsed quantity
-        await Product.findByIdAndUpdate(productId, {
-          $inc: { quantity: -parsedQuantity },
-        });
-
-        console.log(
-          `Product with ID ${productId} updated successfully. Quantity decreased by ${parsedQuantity}.`
+      if (isNaN(parsedQuantity)) {
+        throw new Error(
+          `Invalid quantity value for product with ID ${productId}.`
         );
       }
+      await Product.findByIdAndUpdate(productId, {
+        $inc: { quantity: -parsedQuantity },
+      });
+
+      console.log(
+        `Product with ID ${productId} updated successfully. Quantity decreased by ${parsedQuantity}.`
+      );
     }
 
     res.status(201).json({

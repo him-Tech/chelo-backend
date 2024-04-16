@@ -16,10 +16,10 @@ export const sendEmail = async (email, emailContent, emailSubject) => {
       from: `CheloShop`,
       to: email,
       subject: emailSubject,
-      text: emailContent,
+      html: `${emailContent}`,
     });
 
-    console.log("Email sent:", info);
+    console.log("Email sent:", info.response);
   } catch (error) {
     console.error("Error sending email:", error);
     throw error;

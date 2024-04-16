@@ -1,4 +1,6 @@
 import { sendEmail } from "../utils/sendEmail.js";
+import { orderDelivery } from "../emailTemplates/orderDelivery.js";
+import { confirmOrder } from "../emailTemplates/orderConfirmed.js";
 
 export const sendCustomerEmail = async (req, res) => {
   try {
@@ -17,3 +19,34 @@ export const sendCustomerEmail = async (req, res) => {
     });
   }
 };
+
+export const sendDeliveryUpdateEmail = async (req, res) => {
+  try {
+    const {
+      customerName,
+      orderNumber,
+      trackingLink,
+      deliveryAddress,
+      customerEmail,
+    } = req.body;
+
+    const emailRes = await sendEmail(
+      customerEmail,
+      orderDelivery(customerName, orderNumber, trackingLink, deliveryAddress),
+      "Your order is on it's way"
+    );
+
+    return res.json({
+      success: true,
+      message: "Email sent successfully",
+    });
+  } catch (error) {
+    console.log("Error", error);
+    console.log("Error message :", error.message);
+    return res.json({
+      success: false,
+      message: "Something went wrong...",
+    });
+  }
+};
+
