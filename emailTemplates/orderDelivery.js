@@ -75,11 +75,11 @@ const orderDelivery = (
                 Delivery Address:
               </h2>
               <p style="font-size: 16px; color: black; margin-top: 10px">
-                <strong>${deliveryAddress.customerName}</strong><br />
-                <strong>${deliveryAddress.address.contactNumber}</strong>
+                <strong>${customerName}</strong><br />
+                <strong>${deliveryAddress.contactNumber}</strong>
               </p>
               <p style="font-size: 16px; color: #24104f; margin-top: 10px">
-              ${deliveryAddress.address.addressLine1},<br />${deliveryAddress.address.addressLine2},<br />${deliveryAddress.address.streetCode}
+              ${deliveryAddress.addressLine1},<br />${deliveryAddress.addressLine2},<br />${deliveryAddress.streetCode}
               </p>
             </div>
             <div
