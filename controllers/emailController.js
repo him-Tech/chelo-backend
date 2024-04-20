@@ -26,13 +26,14 @@ export const sendDeliveryUpdateEmail = async (req, res) => {
       customerName,
       orderNumber,
       trackingLink,
+      description,
       deliveryAddress,
       customerEmail,
     } = req.body;
 
     const emailRes = await sendEmail(
       customerEmail,
-      orderDelivery(customerName, orderNumber, trackingLink, deliveryAddress),
+      orderDelivery(customerName, orderNumber, trackingLink, deliveryAddress,description),
       "Your order is on it's way"
     );
 
@@ -49,4 +50,3 @@ export const sendDeliveryUpdateEmail = async (req, res) => {
     });
   }
 };
-

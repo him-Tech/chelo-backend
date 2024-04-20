@@ -2,7 +2,8 @@ const orderDelivery = (
   customerName,
   orderNumber,
   trackingLink,
-  deliveryAddress
+  deliveryAddress,
+  description
 ) => {
   return `<!DOCTYPE html>
       <html lang="en">
@@ -73,58 +74,12 @@ const orderDelivery = (
                   ${deliveryAddress.addressLine1},<br />${deliveryAddress.addressLine2},<br />${deliveryAddress.streetCode}
                 </p>
               </div>
-              <div
-                style="
-                  border-top: 1px solid rgba(182, 182, 182, 0.3);
-                  padding: 20px 0;
-                  margin-top: 20px;
-                "
-              >
-                <h2 style="font-size: 20px; font-weight: bold; color: #24104f">
-                  Need more info:
-                </h2>
-                <p style="font-size: 14px; color: #24104f; margin-top: 10px">
-                  Contact DSV directly on <strong>011 671 9774</strong>. Use your ID
-                  number or <br />the order number <strong>${orderNumber}</strong> as a
-                  reference.
+
+              <p style="font-size: 16px; color: #24104f; margin-top: 10px">
+                  <b>Description:</b><br/>
+                  ${description}
                 </p>
-                <p style="font-size: 14px; color: #24104f; margin-top: 20px">
-                  Warm Regards,<br />Chelo Team
-                </p>
-                <div style="
-                  display: flex;
-                  justify-content: center;
-                  margin-top: 20px;
-                  flex-wrap: wrap;
-                ">
-                  <button style="
-                    padding: 10px 20px;
-                    background: #5945e3;
-                    color: white;
-                    border: none;
-                    border-radius: 5px;
-                    margin-right: 10px;
-                    cursor: pointer;
-                  ">
-                    Track Your Order
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div style="text-align: center; margin-top: 20px">
-              <p style="font-size: 16px; color: #24104f">
-                Don't want to receive these emails anymore?
-                <a href="#" style="text-decoration: underline; color: #24104f">Unsubscribe</a>
-              </p>
-              <p style="font-size: 16px; color: #24104f">
-                <a href="#" style="text-decoration: underline; color: #24104f">Manage Your Profile</a>
-                |
-                <a href="#" style="text-decoration: underline; color: #24104f">Terms</a>
-                |
-                <a href="#" style="text-decoration: underline; color: #24104f">Code of Conduct</a>
-                |
-                <a href="#" style="text-decoration: underline; color: #24104f">Privacy Centre</a>
-              </p>
+              
             </div>
           </section>
         </body>
