@@ -134,8 +134,7 @@ const confirmOrder = (orderNumber, customerName, orderDate, productsData) => {
               To be delivered to:
             </h2>
             <p style="font-size: 16px; color: black; margin-top: 10px">
-              <strong>Kgosi Kekena</strong><br />
-              <strong>073 123 4567</strong>
+              <strong>${customerName}</strong><br />
             </p>
             <p style="font-size: 16px; color: #24104f; margin-top: 10px">
               234 Street name,<br />
