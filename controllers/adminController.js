@@ -1,6 +1,7 @@
 import Admin from "../models/adminSchema.js";
 import Order from "../models/orderSchema.js";
 import Customer from "../models/customerSchema.js";
+import Review from "../models/customerReviewsSchema.js";
 import jwt from "jsonwebtoken";
 import { comparePassword, hashPassword } from "../helpers/bcrypt.js";
 
@@ -308,7 +309,7 @@ export const deleteCustomer = async (req, res) => {
     const customerId = req.params.customerId;
     const existingCustomer = await Customer.findById(customerId);
     if (!existingCustomer) {
-      res.status(201).json({
+      res.status(404).json({
         success: false,
         message: "Customer not found",
       });
@@ -323,5 +324,51 @@ export const deleteCustomer = async (req, res) => {
     res
       .status(500)
       .json({ success: false, message: "Error deleting customer" });
+  }
+};
+
+export const getAllReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find();
+    res.status(200).json({
+      success: true,
+      message: "All reviews fetched successfully",
+      reviews,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching all reviews on platform",
+      error,
+    });
+  }
+};
+
+export const deleteReviewsAsAdmin = async (req, res) => {
+  try {
+    const reviewId = req.params.reviewId;
+    const existingReview = await Review.findById(reviewId);
+    if (!existingReview) {
+      res.status(404).json({
+        success: false,
+        message: "Review not found",
+      });
+    }
+
+    const deletedReview = await Review.findByIdAndDelete(reviewId);
+
+    return res.status(200).json({
+      success: true,
+      message: "Review deleted successfully...",
+      deletedReview,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Error deleting review",
+      error,
+    });
   }
 };

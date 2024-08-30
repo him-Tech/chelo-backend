@@ -54,7 +54,7 @@ const orderDelivery = (
                 on its way to your address. You can also keep track of your order
                 <a href="${trackingLink}" style="text-decoration: underline; color: #24104f">here</a>.<br /><br />
                 Thank you for shopping at
-                <a href="https://your-chelo-shop.com" style="text-decoration: underline; color: #24104f">Chelo</a>.
+                <a href="https://your-chelo-shop.com" style="text-decoration: underline; color: #24104f">FRD</a>.
               </p>
               <div
                 style="

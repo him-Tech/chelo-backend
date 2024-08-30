@@ -57,7 +57,7 @@ const confirmOrder = (orderNumber, customerName, orderDate, productsData) => {
           <div style="border: 1px solid #d4ceff; border-radius: 10px; background: white; padding: 20px;">
             <p style="font-size: 16px; color: #24104f; line-height: 1.5">
               Hi ${customerName}, <br /><br />
-              Thank you for shopping with Chelo. We are preparing your order.<br />
+              Thank you for shopping with FRD. We are preparing your order.<br />
               We will email you whenever the status of your order changes.
             </p>
             <div style="margin-top: 20px">
@@ -149,7 +149,7 @@ const confirmOrder = (orderNumber, customerName, orderDate, productsData) => {
                 margin-top: 20px;
               ">
             <p style="font-size: 14px; color: #24104f">
-              Warm Regards,<br />Chelo Team
+              Warm Regards,<br />FRD Team
             </p>
             <div style="
                   display: flex;

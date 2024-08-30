@@ -5,8 +5,8 @@ import { comparePassword, hashPassword } from "../helpers/bcrypt.js";
 
 export const registerCustomer = async (req, res) => {
   try {
-    const { name, email, password, dob, gender } = req.body;
-    if (!name || !email || !password || !dob || !gender) {
+    const { name, email, password, gender } = req.body;
+    if (!name || !email || !password || !gender) {
       return res.status(404).send({
         success: false,
         message: "All the fields are Mendatory",
@@ -26,7 +26,6 @@ export const registerCustomer = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      dob,
       gender,
     });
 

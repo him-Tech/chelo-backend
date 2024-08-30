@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Category from "./categorySchema.js";
+import Review from "./customerReviewsSchema.js";
 const { Schema } = mongoose;
 
 const productSchema = new Schema(
@@ -7,7 +8,7 @@ const productSchema = new Schema(
     quantity: {
       type: Number,
       required: true,
-    },    
+    },
     name: {
       type: String,
       required: true,
@@ -45,6 +46,14 @@ const productSchema = new Schema(
         type: String,
       },
     ],
+    rating: {
+      type: Number,
+      default: 5,
+    },
+    customerReviews: {
+      type: Schema.Types.ObjectId,
+      ref: "Review",
+    }
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields

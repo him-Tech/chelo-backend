@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Product from "./productSchema.js";
 const { Schema } = mongoose;
 
 const categoriesSchema = new Schema(
@@ -14,6 +15,10 @@ const categoriesSchema = new Schema(
     isActive: {
       type: Boolean,
       default: true,
+    },
+    products: {
+      type: Schema.Types.ObjectId,
+      ref: "Product",
     },
   },
   {

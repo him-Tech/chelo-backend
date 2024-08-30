@@ -32,7 +32,7 @@ app.use("/api/v1/category", categoryRoutes);
 
 // Default route
 app.get("/", (req, res) => {
-  res.send("<h1>Welcome to Chelo Shop</h1>");
+  res.send("<h1>Welcome to FRD Marketplace Shop</h1>");
 });
 
 export default app;

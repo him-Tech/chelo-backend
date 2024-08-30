@@ -4,6 +4,7 @@ import Order from "../models/orderSchema.js";
 import Category from "../models/categorySchema.js";
 import { v2 as cloudinary } from "cloudinary";
 import { uploadImageToCloudinary } from "../utils/imageUploader.js";
+import Review from "../models/customerReviewsSchema.js";
 
 function isFileTypeSupported(type, supportedTypes) {
   return supportedTypes.includes(type);
@@ -66,7 +67,7 @@ export const addProduct = async (req, res) => {
 
     await addNewProduct.save();
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "Product added successfully",
       addNewProduct,
@@ -83,7 +84,9 @@ export const addProduct = async (req, res) => {
 
 export const getAllProductDetails = async (req, res) => {
   try {
-    const products = await Product.find().populate("category");
+    const products = await Product.find()
+      .populate("category")
+      .populate("customerReviews");
     res.status(200).json({
       success: true,
       products,
@@ -188,5 +191,70 @@ export const deleteProduct = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ success: false, message: "Error deleting product" });
+  }
+};
+
+export const addReview = async (req, res) => {
+  try {
+    const { user, description, rating, productId } = req.body;
+
+    if (!user || !description || !rating || !productId) {
+      return res.status(204).json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
+
+    const newReview = new Review({
+      user,
+      description,
+      rating,
+    });
+
+    await newReview.save();
+    await Product.findByIdAndUpdate(productId, {
+      $push: { customerReviews: newReview._id },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Product review updated successfully",
+      newReview,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Error creating review",
+      error,
+    });
+  }
+};
+
+export const deleteReview = async (req, res) => {
+  try {
+    const reviewId = req.params.reviewId;
+    const existingReview = await Review.findById(reviewId);
+    if (!existingReview) {
+      res.status(404).json({
+        success: false,
+        message: "Review not found",
+      });
+    }
+
+    const deletedReview = await Review.findByIdAndDelete(reviewId);
+
+    return res.status(200).json({
+      success: true,
+      message: "Review deleted successfully...",
+      deletedReview,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Error deleting review",
+      error,
+    });
   }
 };

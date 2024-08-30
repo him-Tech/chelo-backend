@@ -8,7 +8,7 @@ import { registerAdmin,
     updateEmail, 
     updateOrderStatus, 
     deleteCustomer, 
-    adminData } 
+    adminData, getAllReviews, deleteReviewsAsAdmin } 
     from "../controllers/adminController.js";
 
 import { requireAdmin, requireSignIn } from "../middlewares/authenticationMiddleware.js";
@@ -27,5 +27,7 @@ router.route("/deliveryUpdateEmail").post(requireSignIn, requireAdmin, sendDeliv
 router.route('/updatePassword').put(requireSignIn, requireAdmin, updatePassword);
 router.route('/updateEmail').put(requireSignIn, requireAdmin, updateEmail);
 router.route('/profile').get(requireSignIn, requireAdmin, adminData);
+router.route('/allReviews').get(requireSignIn, requireAdmin, getAllReviews);
+router.route("/deleteReview/:reviewId").delete(requireSignIn, requireAdmin, deleteReviewsAsAdmin);
 
 export default router;

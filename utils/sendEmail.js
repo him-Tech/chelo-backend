@@ -13,7 +13,7 @@ export const sendEmail = async (email, emailContent, emailSubject) => {
 
     // Send mail
     let info = await transporter.sendMail({
-      from: `CheloShop`,
+      from: `FRD`,
       to: email,
       subject: emailSubject,
       html: `${emailContent}`,
